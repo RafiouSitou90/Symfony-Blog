@@ -4,8 +4,12 @@ namespace App\Entity;
 
 use App\Entity\Traits\Timestamps;
 use App\Repository\CommentsResponsesRepository;
+use DateTime;
 use DateTimeInterface;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CommentsResponsesRepository::class)
@@ -32,6 +36,15 @@ class CommentsResponses
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="The content should not be blank")
+     * @Assert\NotNull(message="The content should not be null.")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 10000,
+     *      minMessage = "Your content must be at least {{ limit }} characters long.",
+     *      maxMessage = "Your content cannot be longer than {{ limit }} characters.",
+     *      allowEmptyString = false
+     * )
      * @var string
      */
     private ?string $content = null;
@@ -46,7 +59,7 @@ class CommentsResponses
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="commentResponses")
      * @var User|null
      */
-    private ?User $user = null;
+    private ?User $author = null;
 
     /**
      * @ORM\Column(type="datetime")
@@ -105,9 +118,9 @@ class CommentsResponses
     /**
      * @return User|null
      */
-    public function getUser(): ?User
+    public function getAuthor(): ?User
     {
-        return $this->user;
+        return $this->author;
     }
 
     /**
@@ -115,9 +128,9 @@ class CommentsResponses
      *
      * @return $this
      */
-    public function setUser(?User $user): self
+    public function setAuthor(?User $user): self
     {
-        $this->user = $user;
+        $this->author = $user;
 
         return $this;
     }
@@ -138,6 +151,18 @@ class CommentsResponses
     public function setPublishedAt(DateTimeInterface $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @return $this
+     * @throws Exception
+     */
+    public function setPublishedAtValue(): self
+    {
+        $this->publishedAt = new DateTime('now', new DateTimeZone(self::DEFAULT_TIMEZONE));
 
         return $this;
     }

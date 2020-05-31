@@ -130,7 +130,7 @@ class User implements UserInterface
     private $ratings;
 
     /**
-     * @ORM\OneToMany(targetEntity=CommentsResponses::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=CommentsResponses::class, mappedBy="author")
      * @var CommentsResponses[]|ArrayCollection
      */
     private $commentResponses;
@@ -480,7 +480,7 @@ class User implements UserInterface
     {
         if (!$this->commentResponses->contains($commentResponse)) {
             $this->commentResponses[] = $commentResponse;
-            $commentResponse->setUser($this);
+            $commentResponse->setAuthor($this);
         }
 
         return $this;
@@ -496,8 +496,8 @@ class User implements UserInterface
         if ($this->commentResponses->contains($commentResponse)) {
             $this->commentResponses->removeElement($commentResponse);
             // set the owning side to null (unless already changed)
-            if ($commentResponse->getUser() === $this) {
-                $commentResponse->setUser(null);
+            if ($commentResponse->getAuthor() === $this) {
+                $commentResponse->setAuthor(null);
             }
         }
 
