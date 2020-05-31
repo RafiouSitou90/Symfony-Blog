@@ -1,0 +1,6 @@
+App\Entity\User:
+  user:
+    username: username
+    email: email\@domain.com
+    password: 12345678
+    full_name: firstname
