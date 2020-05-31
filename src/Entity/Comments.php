@@ -4,10 +4,14 @@ namespace App\Entity;
 
 use App\Entity\Traits\Timestamps;
 use App\Repository\CommentsRepository;
+use DateTime;
 use DateTimeInterface;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CommentsRepository::class)
@@ -34,6 +38,15 @@ class Comments
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="The content should not be blank")
+     * @Assert\NotNull(message="The content should not be null.")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 10000,
+     *      minMessage = "Your content must be at least {{ limit }} characters long.",
+     *      maxMessage = "Your content cannot be longer than {{ limit }} characters.",
+     *      allowEmptyString = false
+     * )
      * @var string
      */
     private ?string $content = null;
@@ -195,6 +208,18 @@ class Comments
                 $commentResponse->setComment(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @return $this
+     * @throws Exception
+     */
+    public function setPublishedAtValue(): self
+    {
+        $this->publishedAt = new DateTime('now', new DateTimeZone(self::DEFAULT_TIMEZONE));
 
         return $this;
     }
