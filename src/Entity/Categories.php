@@ -8,10 +8,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CategoriesRepository::class)
  * @ORM\Table(name="tab_categories")
+ * @UniqueEntity(fields={"slug"}, message="There is already an category with this slug")
  *
  * @ORM\HasLifecycleCallbacks()
  */
@@ -34,12 +37,21 @@ class Categories
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="The name should not be blank")
+     * @Assert\NotNull(message="The name should not be null.")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 255,
+     *      minMessage = "Your name must be at least {{ limit }} characters long.",
+     *      maxMessage = "Your name cannot be longer than {{ limit }} characters.",
+     *      allowEmptyString = false
+     * )
      * @var string
      */
     private ?string $name = null;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Gedmo\Slug(fields={"name"})
      * @var string
      */
@@ -49,7 +61,7 @@ class Categories
      * @ORM\OneToMany(targetEntity=Articles::class, mappedBy="category")
      * @var Articles[]|ArrayCollection
      */
-    private ArrayCollection $articles;
+    private $articles;
 
     /**
      * Categories constructor.

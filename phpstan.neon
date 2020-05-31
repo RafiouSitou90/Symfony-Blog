@@ -13,3 +13,6 @@ parameters:
     - tests/bootstrap.php
   checkMissingIterableValueType: false
   checkGenericClassInNonGenericObjectType: false
+
+  autoload_files:
+    - bin/.phpunit/phpunit-7.5-0/vendor/autoload.php

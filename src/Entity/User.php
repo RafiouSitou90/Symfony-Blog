@@ -7,13 +7,17 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="tab_users")
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  *
  * @ORM\HasLifecycleCallbacks()
  * @Vich\Uploadable()
@@ -37,6 +41,15 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="The username should not be blank")
+     * @Assert\NotNull(message="The username should not be null.")
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 180,
+     *      minMessage = "Your username must be at least {{ limit }} characters long.",
+     *      maxMessage = "Your username cannot be longer than {{ limit }} characters.",
+     *      allowEmptyString = false
+     * )
      * @var string
      */
     private ?string $username = null;
@@ -55,12 +68,26 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(message="The email should not be blank.")
+     * @Assert\NotNull(message="The email should not be null.")
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email."
+     * )
      * @var string
      */
     private ?string $email = null;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="The fullname should not be blank")
+     * @Assert\NotNull(message="The fullname should not be null.")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 180,
+     *      minMessage = "Your fullname must be at least {{ limit }} characters long.",
+     *      maxMessage = "Your fullname cannot be longer than {{ limit }} characters.",
+     *      allowEmptyString = false
+     * )
      * @var string
      */
     private ?string $fullName = null;
@@ -88,25 +115,25 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Articles::class, mappedBy="author")
      * @var Articles[]|ArrayCollection
      */
-    private ArrayCollection $articles;
+    private $articles;
 
     /**
      * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="author")
      * @var Comments[]|ArrayCollection
      */
-    private ArrayCollection $comments;
+    private $comments;
 
     /**
      * @ORM\OneToMany(targetEntity=Ratings::class, mappedBy="user")
      * @var Ratings[]|ArrayCollection
      */
-    private ArrayCollection $ratings;
+    private $ratings;
 
     /**
      * @ORM\OneToMany(targetEntity=CommentsResponses::class, mappedBy="user")
      * @var CommentsResponses[]|ArrayCollection
      */
-    private ArrayCollection $commentResponses;
+    private $commentResponses;
 
     /**
      * User constructor.
@@ -251,6 +278,26 @@ class User implements UserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    /**
+     * @param File|null $avatarFile
+     *
+     * @return $this
+     */
+    public function setAvatarFile(?File $avatarFile): self
+    {
+        $this->avatarFile = $avatarFile;
+
+        return $this;
+    }
+
+    /**
+     * @return null|File
+     */
+    public function getAvatarFile(): ?File
+    {
+        return $this->avatarFile;
     }
 
     /**

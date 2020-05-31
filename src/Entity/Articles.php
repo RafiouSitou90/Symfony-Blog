@@ -9,12 +9,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=ArticlesRepository::class)
  * @ORM\Table(name="tab_articles")
+ * @UniqueEntity(fields={"slug"}, message="There is already an article with this title")
  *
  * @ORM\HasLifecycleCallbacks()
  * @Vich\Uploadable()
@@ -65,24 +68,49 @@ class Articles
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="The title should not be blank")
+     * @Assert\NotNull(message="The title should not be null.")
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 255,
+     *      minMessage = "Your title must be at least {{ limit }} characters long.",
+     *      maxMessage = "Your title cannot be longer than {{ limit }} characters.",
+     *      allowEmptyString = false
+     * )
      * @var string
      */
     private ?string $title = null;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Gedmo\Slug(fields={"title"})
      */
     private string $slug;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="The summary should not be blank")
+     * @Assert\NotNull(message="The summary should not be null.")
+     * @Assert\Length(
+     *      min = 8,
+     *      max = 255,
+     *      minMessage = "Your summary must be at least {{ limit }} characters long.",
+     *      maxMessage = "Your summary cannot be longer than {{ limit }} characters.",
+     *      allowEmptyString = false
+     * )
      * @var string
      */
     private ?string $summary = null;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="The content should not be blank")
+     * @Assert\NotNull(message="The content should not be null.")
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Your content must be at least {{ limit }} characters long.",
+     *      allowEmptyString = false
+     * )
      * @var string
      */
     private ?string $content = null;
@@ -334,6 +362,27 @@ class Articles
         $this->commentsStatus = $commentsStatus;
 
         return $this;
+    }
+
+
+    /**
+     * @param File $imageFile
+     *
+     * @return $this
+     */
+    public function setImageFile(File $imageFile): self
+    {
+        $this->imageFile = $imageFile;
+
+        return $this;
+    }
+
+    /**
+     * @return File
+     */
+    public function getImageFile(): File
+    {
+        return $this->imageFile;
     }
 
     /**
