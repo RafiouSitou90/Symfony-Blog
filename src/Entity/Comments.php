@@ -73,7 +73,7 @@ class Comments
      * @ORM\OneToMany(targetEntity=CommentsResponses::class, mappedBy="comment")
      * @var CommentsResponses[]|ArrayCollection
      */
-    private ArrayCollection $commentResponses;
+    private $commentResponses;
 
     /**
      * Comments constructor.

@@ -170,7 +170,7 @@ class Articles
      *
      * @var Comments[]|ArrayCollection
      */
-    private ArrayCollection $comments;
+    private $comments;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tags::class, cascade={"persist"})
@@ -184,7 +184,7 @@ class Articles
      * @ORM\OneToMany(targetEntity=Ratings::class, mappedBy="article")
      * @var Ratings[]|ArrayCollection
      */
-    private ArrayCollection $ratings;
+    private $ratings;
 
     /**
      * Articles constructor.
