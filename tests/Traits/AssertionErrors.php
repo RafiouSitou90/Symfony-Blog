@@ -1,21 +1,23 @@
 <?php
 
-
 namespace App\Tests\Traits;
 
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 trait AssertionErrors
 {
     /**
-     * @param object $object
+     * @param Object $object
      * @param int $number
      *
      * @return void
      */
-    public function assertHasErrors (object $object, int $number = 0)
+    public function assertHasErrors (Object $object, int $number = 0)
     {
         self::bootKernel();
-        $errors = self::$container->get('validator')->validate($object);
+        /** @var ValidatorInterface $validator */
+        $validator = self::$container->get('validator');
+        $errors = $validator->validate($object);
 
         $messages = [];
         foreach ($errors as $error) {

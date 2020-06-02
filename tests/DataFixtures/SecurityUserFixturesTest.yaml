@@ -1,0 +1,21 @@
+App\Entity\User:
+  user_{1..5}:
+    username: 'user_name<current()>'
+    email: 'user<current()>\@domain.com'
+    password: 123456789
+    full_name: firstname
+    roles: ["ROLE_USER"]
+
+  admin_{1..5}:
+    username: 'admin_name<current()>'
+    email: 'admin<current()>\@domain.com'
+    password: 123456789
+    full_name: firstname
+    roles: ["ROLE_ADMIN"]
+
+  superadmin_{1..5}:
+    username: 'super_admin<current()>'
+    email: 'super_admin<current()>\@domain.com'
+    password: 123456789
+    full_name: firstname
+    roles: ["ROLE_SUPER_ADMIN"]
