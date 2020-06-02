@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -134,6 +135,24 @@ class User implements UserInterface
      * @var CommentsResponses[]|ArrayCollection
      */
     private $commentResponses;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private ?string $token = null;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @var bool
+     */
+    private bool $isActive = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @var bool
+     */
+    private bool $isDeleted = false;
 
     /**
      * User constructor.
@@ -500,6 +519,77 @@ class User implements UserInterface
                 $commentResponse->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string|null $token
+     *
+     * @return $this
+     */
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function generateToken()
+    {
+        $this->token = urlencode(rtrim(strtr(base64_encode(random_bytes(64)), '+/', '-_'), '='));
+    }
+
+    /**
+     * @param bool $isActive
+     *
+     * @return $this
+     */
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsDeleted(): bool
+    {
+        return $this->isDeleted;
+    }
+
+    /**
+     * @param bool $isDeleted
+     *
+     * @return $this
+     */
+    public function setIsDeleted(bool $isDeleted): self
+    {
+        $this->isDeleted = $isDeleted;
 
         return $this;
     }

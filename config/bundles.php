@@ -18,4 +18,5 @@ return [
     Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle::class => ['dev' => true, 'test' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
+    Fidry\PsyshBundle\PsyshBundle::class => ['dev' => true, 'test' => true],
 ];
