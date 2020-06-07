@@ -1,0 +1,74 @@
+<?php
+
+
+namespace App\Tests\Form;
+
+
+use App\Entity\Articles;
+use App\Entity\Categories;
+use App\Entity\User;
+use App\Form\ArticlesFormType;
+use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+class ArticlesFormTypeTest extends TypeTestCase
+{
+    public function testValidSubmitData()
+    {
+
+        $formData = [
+            'author' => new User(),
+            'category' => new Categories(),
+            'title' => 'Article title',
+            'summary' => 'Article summary',
+            'content' => 'Article content',
+            'imageFile' => new UploadedFile(
+                dirname(__DIR__).'/DataFixtures/Images/Article.jpg', 'Article.jpg'),
+            'articleStatus' => Articles::PUBLISHED(),
+            'commentsStatus' => Articles::COMMENT_OPENED()
+        ];
+
+        $article = (new Articles())
+            ->setAuthor((new User())
+                ->setUsername('Username')
+                ->setEmail('email@domain.com')
+                ->setFullName('Full Name'))
+            ->setCategory((new Categories())->setName('category name'))
+            ->setTitle('Article title')
+            ->setSummary('Article summary')
+            ->setContent('Article content')
+            ->setImageFile(new UploadedFile(
+                dirname(__DIR__).'/DataFixtures/Images/Article.jpg', 'Article.jpg'))
+            ->setCommentsStatus(Articles::COMMENT_OPENED())
+            ->setArticleStatus(Articles::PUBLISHED())
+        ;
+
+        $form = $this->factory->create(ArticlesFormType::class, $article);
+
+        $expected = (new Articles())
+            ->setAuthor((new User())
+                ->setUsername('Username')
+                ->setEmail('email@domain.com')
+                ->setFullName('Full Name'))
+            ->setCategory((new Categories())->setName('category name'))
+            ->setTitle('Article title')
+            ->setSummary('Article summary')
+            ->setContent('Article content')
+            ->setImageFile(new UploadedFile(
+                dirname(__DIR__).'/DataFixtures/Images/Article.jpg', 'Article.jpg'))
+            ->setCommentsStatus(Articles::COMMENT_OPENED())
+            ->setArticleStatus(Articles::PUBLISHED())
+        ;
+
+        $form->submit($formData);
+
+        $this->assertTrue($form->isSynchronized());
+        $this->assertEquals($expected, $article);
+
+        $children = $form->createView()->children;
+
+        foreach (array_keys($formData) as $key) {
+            $this->assertArrayHasKey($key, $children);
+        }
+    }
+}
