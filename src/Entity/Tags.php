@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Traits\Timestamps;
 use App\Repository\TagsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=TagsRepository::class)
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\HasLifecycleCallbacks()
  */
-class Tags
+class Tags implements JsonSerializable
 {
     use Timestamps;
 
@@ -33,7 +34,7 @@ class Tags
      * @ORM\Column(type="string", length=255)
      * @var string
      */
-    private ?string $name = null;
+    private string $name;
 
     /**
      * @return string|null
@@ -44,9 +45,9 @@ class Tags
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -61,5 +62,23 @@ class Tags
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string|null
+     */
+    public function jsonSerialize()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
     }
 }

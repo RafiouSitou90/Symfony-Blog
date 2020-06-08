@@ -120,19 +120,19 @@ class Articles
      * @Vich\UploadableField(mapping="articles_images", fileNameProperty="imageName", size="imageSize")
      * @var File
      */
-    private File $imageFile;
+    private ?File $imageFile = null;
 
     /**
      * @ORM\Column(type="string", length=191, nullable=true)
      * @var string
      */
-    private string $imageName;
+    private ?string $imageName = null;
 
     /**
      * @ORM\Column(type="integer")
      * @var int
      */
-    private int $imageSize = 0;
+    private ?int $imageSize = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="articles")
@@ -176,9 +176,11 @@ class Articles
      * @ORM\ManyToMany(targetEntity=Tags::class, cascade={"persist"})
      * @ORM\JoinTable(name="tab_articles_tags")
      * @ORM\OrderBy({"name": "ASC"})
+     * @Assert\Count(max="4", maxMessage="This fields should contain {{ limit }} tags or less")
+     *
      * @var Tags[]|ArrayCollection
      */
-    private ArrayCollection $tags;
+    private $tags;
 
     /**
      * @ORM\OneToMany(targetEntity=Ratings::class, mappedBy="article")
@@ -378,9 +380,9 @@ class Articles
     }
 
     /**
-     * @return File
+     * @return File|null
      */
-    public function getImageFile(): File
+    public function getImageFile(): ?File
     {
         return $this->imageFile;
     }
@@ -394,11 +396,11 @@ class Articles
     }
 
     /**
-     * @param string $imageName
+     * @param string|null $imageName
      *
      * @return $this
      */
-    public function setImageName(string $imageName): self
+    public function setImageName(?string $imageName): self
     {
         $this->imageName = $imageName;
 
@@ -414,11 +416,11 @@ class Articles
     }
 
     /**
-     * @param int $imageSize
+     * @param int|null $imageSize
      *
      * @return $this
      */
-    public function setImageSize(int $imageSize): self
+    public function setImageSize(?int $imageSize): self
     {
         $this->imageSize = $imageSize;
 

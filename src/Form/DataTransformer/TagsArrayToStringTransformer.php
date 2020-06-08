@@ -1,14 +1,16 @@
 <?php
 
-
 namespace App\Form\DataTransformer;
-
 
 use App\Entity\Tags;
 use App\Repository\TagsRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use function Symfony\Component\String\u;
 
+/**
+ * Class TagsArrayToStringTransformer
+ * @package App\Form\DataTransformer
+ */
 class TagsArrayToStringTransformer implements DataTransformerInterface
 {
     /**
@@ -26,7 +28,7 @@ class TagsArrayToStringTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param mixed $tags
+     * @param Tags $tags
      * @return mixed|string
      */
     public function transform($tags)

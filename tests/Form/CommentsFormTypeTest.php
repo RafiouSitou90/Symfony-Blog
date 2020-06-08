@@ -10,6 +10,9 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class CommentsFormTypeTest extends TypeTestCase
 {
+    /**
+     * @return void
+     */
     public function testValidSubmitData()
     {
         $formData = [

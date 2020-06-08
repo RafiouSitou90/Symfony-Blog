@@ -559,7 +559,7 @@ class User implements UserInterface
      */
     public function generateToken()
     {
-        $this->token = urlencode(rtrim(strtr(base64_encode(random_bytes(64)), '+/', '-_'), '='));
+        $this->token = self::generateActivationToken();
     }
 
     /**
@@ -592,5 +592,14 @@ class User implements UserInterface
         $this->isDeleted = $isDeleted;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public static function generateActivationToken ()
+    {
+        return urlencode(rtrim(strtr(base64_encode(random_bytes(64)), '+/', '-_'), '='));
     }
 }
