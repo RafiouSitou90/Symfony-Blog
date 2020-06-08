@@ -1,0 +1,12 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block admin_title %}Article Updating{% endblock %}
+
+{% block body %}
+    <h1>Admin Article Updating Page</h1>
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <button type="submit">Update</button>
+    {{ form_end(form) }}
+{% endblock %}

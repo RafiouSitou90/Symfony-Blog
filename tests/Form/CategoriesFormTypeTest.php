@@ -8,6 +8,9 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class CategoriesFormTypeTest extends TypeTestCase
 {
+    /**
+     * @return void
+     */
     public function testValidSubmitData()
     {
         $formData = [

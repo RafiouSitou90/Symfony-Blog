@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichFileType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ArticlesFormType extends AbstractType
 {
@@ -30,8 +30,8 @@ class ArticlesFormType extends AbstractType
             ->add('title', TextType::class, [])
             ->add('summary', TextType::class, [])
             ->add('content', TextareaType::class, [])
-            ->add('imageFile', VichFileType::class, [
-                'data_class' => null,
+            ->add('imageFile', VichImageType::class, [
+                'label' => 'Image',
                 'download_uri' => false,
                 'required' => true
             ])
@@ -40,17 +40,16 @@ class ArticlesFormType extends AbstractType
             ])
             ->add('articleStatus', ChoiceType::class, [
                 'choices' => [
-                    Articles::DRAFT() => Articles::DRAFT(),
-                    Articles::PUBLISHED() => Articles::PUBLISHED(),
-                    Articles::ARCHIVED() => Articles::ARCHIVED()
+                    strtoupper(Articles::DRAFT()) => Articles::DRAFT(),
+                    strtoupper(Articles::PUBLISHED()) => Articles::PUBLISHED(),
+                    strtoupper(Articles::ARCHIVED()) => Articles::ARCHIVED()
                 ],
-                'required' => false
             ])
             ->add('commentsStatus', ChoiceType::class, [
                 'choices' => [
-                    Articles::COMMENT_OPENED() => Articles::COMMENT_OPENED(),
-                    Articles::COMMENT_CLOSED() => Articles::COMMENT_CLOSED()
-                ]
+                    strtoupper(Articles::COMMENT_OPENED()) => Articles::COMMENT_OPENED(),
+                    strtoupper(Articles::COMMENT_CLOSED()) => Articles::COMMENT_CLOSED()
+                ],
             ])
             ->add('category', EntityType::class, [
                 'placeholder' => 'Select the article category',
