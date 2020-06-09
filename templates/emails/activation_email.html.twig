@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Activation email</title>
+</head>
+<body>
+    <h1>Account activation</h1>
+    <p>You have created an account on our blog, please click on the link below to activate it.</p>
+    <p>
+        <a href="{{ absolute_url(path('app_account_activation', {'id': id, 'token': token})) }}"
+           title="Activate my account">
+            Activate my account
+        </a>
+    </p>
+</body>
+</html>

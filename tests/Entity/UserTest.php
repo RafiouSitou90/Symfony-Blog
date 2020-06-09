@@ -22,7 +22,7 @@ class UserTest extends KernelTestCase
             ->setEmail('user_email@domain.com')
             ->setPassword('123456789')
             ->setFullName('First Last Name')
-            ->setAvatarFile(null)
+            ->setProfile(null)
         ;
     }
 
