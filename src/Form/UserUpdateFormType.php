@@ -5,16 +5,13 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
-class UserFormType extends AbstractType
+class UserUpdateFormType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -31,10 +28,10 @@ class UserFormType extends AbstractType
                 ],
             ])
             ->add('email', EmailType::class, [
+                'required' => true,
                 'attr'=> [
                     'class' => 'form-control input-lg'
                 ],
-                'required' => true
             ])
             ->add('fullName', TextType::class, [
                 'required' => true,
@@ -42,29 +39,9 @@ class UserFormType extends AbstractType
                     'class' => 'form-control input-lg'
                 ],
             ])
-            ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'mapped' => false,
-                'required' => true,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'The password should not be blank',
-                    ]),
-                    new Length([
-                        'min' => 8,
-                        'minMessage' => 'The password must be at least {{ limit }} characters long.',
-                        'max' => 50,
-                        'maxMessage' => 'The password cannot be longer than {{ limit }} characters.',
-                    ]),
-                ],
-                'first_options' => array(
-                    'label' => 'Password',
-                    'attr'=> ['class' => 'form-control input-lg'],
-                ),
-                'second_options' => array(
-                    'label' => 'Confirm the password',
-                    'attr'=> ['class' => 'form-control input-lg']
-                )
+            ->add('profile', ProfileFormType::class, [
+                'label' => false,
+                'required' => false
             ])
         ;
     }

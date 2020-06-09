@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -94,25 +93,6 @@ class User implements UserInterface
     private ?string $fullName = null;
 
     /**
-     * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     * @Vich\UploadableField(mapping="users_images", fileNameProperty="avatarName", size="avatarSize")
-     * @var File|null
-     */
-    private ?File $avatarFile = null;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @var string|null
-     */
-    private ?string $avatarName = null;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @var int|null
-     */
-    private ?int $avatarSize = null;
-
-    /**
      * @ORM\OneToMany(targetEntity=Articles::class, mappedBy="author")
      * @var Articles[]|ArrayCollection
      */
@@ -153,6 +133,12 @@ class User implements UserInterface
      * @var bool
      */
     private bool $isDeleted = false;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Profile::class, cascade={"persist", "remove"}, orphanRemoval=true)
+     * @var Profile|null
+     */
+    private ?Profile $profile = null;
 
     /**
      * User constructor.
@@ -295,66 +281,6 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @param File|null $avatarFile
-     *
-     * @return $this
-     */
-    public function setAvatarFile(?File $avatarFile): self
-    {
-        $this->avatarFile = $avatarFile;
-
-        return $this;
-    }
-
-    /**
-     * @return null|File
-     */
-    public function getAvatarFile(): ?File
-    {
-        return $this->avatarFile;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getAvatarName(): ?string
-    {
-        return $this->avatarName;
-    }
-
-    /**
-     * @param string|null $avatarName
-     *
-     * @return $this
-     */
-    public function setAvatarName(?string $avatarName): self
-    {
-        $this->avatarName = $avatarName;
-
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getAvatarSize(): ?int
-    {
-        return $this->avatarSize;
-    }
-
-    /**
-     * @param int|null $avatarSize
-     *
-     * @return $this
-     */
-    public function setAvatarSize(?int $avatarSize): self
-    {
-        $this->avatarSize = $avatarSize;
 
         return $this;
     }
@@ -601,5 +527,17 @@ class User implements UserInterface
     public static function generateActivationToken ()
     {
         return urlencode(rtrim(strtr(base64_encode(random_bytes(64)), '+/', '-_'), '='));
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?Profile $profile): self
+    {
+        $this->profile = $profile;
+
+        return $this;
     }
 }
