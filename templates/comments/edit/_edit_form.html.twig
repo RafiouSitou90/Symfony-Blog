@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Update the comment{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form, {method: 'POST', action: path('app_comments_edit', {'id': comment.id})}) }}
+    <fieldset>
+        <legend>Update the comment</legend>
+        {{ form_errors(form) }}
+
+        {{ form_label(form.content) }}
+        {{ form_errors(form.content) }}
+        {{ form_widget(form.content) }}
+        {{ form_help(form.content) }}
+
+        <button class="" type="submit">Update the comment</button>
+    </fieldset>
+    {{ form_end(form) }}
+{% endblock %}
+

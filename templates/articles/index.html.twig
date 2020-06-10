@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles{% endblock %}
+
+{% block body %}
+    <h1>Articles page</h1>
+
+    {% for article in articles_paginator.results %}
+        <h4>{{ article.title }}</h4>
+        {{ include('articles/tags/_articles_tags.html.twig') }}
+    {% endfor %}
+{% endblock %}
