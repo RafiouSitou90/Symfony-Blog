@@ -6,12 +6,14 @@ use App\Entity\Articles;
 use App\Entity\Comments;
 use App\Entity\CommentsResponses;
 use App\Entity\User;
+use App\Event\CommentsResponsesCreatedEvent;
 use App\Form\CommentsResponsesFormType;
 use App\Repository\ArticlesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,16 +35,25 @@ class CommentsResponsesController extends AbstractController
      * @var ArticlesRepository
      */
     private ArticlesRepository $articlesRepository;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * CommentsController constructor.
      * @param EntityManagerInterface $manager
+     * @param EventDispatcherInterface $eventDispatcher
      * @param ArticlesRepository $articlesRepository
      */
-    public function __construct (EntityManagerInterface $manager, ArticlesRepository $articlesRepository)
+    public function __construct (
+        EntityManagerInterface $manager,
+        EventDispatcherInterface $eventDispatcher,
+        ArticlesRepository $articlesRepository)
     {
         $this->manager = $manager;
         $this->articlesRepository = $articlesRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
 
@@ -72,6 +83,8 @@ class CommentsResponsesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->persist($commentResponse);
             $this->manager->flush();
+
+            $this->eventDispatcher->dispatch(new CommentsResponsesCreatedEvent($commentResponse));
 
             return $this->redirectToRoute('app_articles_show', ['slug' => $article->getSlug()]);
         }
