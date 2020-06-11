@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\Articles;
 use App\Entity\Comments;
 use App\Entity\User;
+use App\Event\CommentsCreatedEvent;
 use App\Form\CommentsFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,14 +29,20 @@ class CommentsController extends AbstractController
      * @var EntityManagerInterface
      */
     private EntityManagerInterface $manager;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * CommentsController constructor.
      * @param EntityManagerInterface $manager
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct (EntityManagerInterface $manager)
+    public function __construct (EntityManagerInterface $manager, EventDispatcherInterface $eventDispatcher)
     {
         $this->manager = $manager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -60,6 +68,8 @@ class CommentsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->manager->persist($comment);
             $this->manager->flush();
+
+            $this->eventDispatcher->dispatch(new CommentsCreatedEvent($comment));
 
             return $this->redirectToRoute('app_articles_show', ['slug' => $article->getSlug()]);
         }
