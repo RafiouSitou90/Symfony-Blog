@@ -27,6 +27,7 @@
     {% if article.comments | length > 0 %}
         {% for comment in article.comments %}
             <div class="">
+                <a id="comment_{{ comment.id }}"></a>
                 <h4 class="">
                     <strong>{{ comment.author.fullName }}</strong> Commented on
                     <strong>{{ comment.publishedAt|date('d/m/Y H:i') }}</strong>
@@ -51,6 +52,7 @@
                         <h2>Comment Responses</h2>
                         {% for commentResponse in comment.commentResponses %}
                             <div>
+                                <a id="comment_response_{{ commentResponse.id }}"></a>
                                 <h4 class="">
                                     <strong>{{ commentResponse.author.fullName }}</strong> Answered on
                                     <strong>{{ commentResponse.publishedAt|date('d/m/Y H:i') }}</strong>

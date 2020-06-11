@@ -67,7 +67,7 @@ class CommentResponseNotificationSubscriber implements EventSubscriberInterface
 
         $linkToArticle = $this->urlGenerator->generate('app_articles_show', [
             'slug' => $article->getSlug(),
-            '_fragment' => 'comment_' . $commentResponse->getId()
+            '_fragment' => 'comment_response_' . $commentResponse->getId()
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $email = (new TemplatedEmail())
