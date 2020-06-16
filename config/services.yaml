@@ -8,6 +8,7 @@ parameters:
     app.path.users_images: /uploads/images/users
 
     app.email.no_reply: '%env(SYMFONY_BLOG_EMAIL_NO_REPLY)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:

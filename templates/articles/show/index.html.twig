@@ -3,72 +3,49 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block body %}
-    <h1>Articles details page</h1>
-
-    <h4>{{ article.title }}</h4>
+    <div class="article mt-5 mb-5">
+        <h1>{{ article.title }}</h1>
+        <p class="article-metadata">
+            <span class="metadata"><i class="fa fa-calendar"></i> {{ article.publishedAt | format_datetime('long', 'medium', '', 'UTC') }}</span>
+            <span class="metadata"><i class="fa fa-user"></i> {{ article.author.fullName }}</span>
+        </p>
+        <div class="article-show-image">
+            <img style="width: 100%; height: 50%" src="{{ vich_uploader_asset(article, 'imageFile') }}" alt="{{ article.title }}"/>
+        </div>
+        <div class="article-show-content mt-3">
+            <p style="font-size: 18px" class="text-justify">{{ article.content }}</p>
+        </div>
+    </div>
 
     {{ include('articles/tags/_articles_tags.html.twig') }}
 
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        {{ render(controller('App\\Controller\\CommentsController::createCommentForm', {'id': article.id})) }}
-    {% else %}
-        <p>
-            <a href="{{ path('app_login', {'redirect_to': app.request.pathInfo}) }}">
-                Login
-            </a>
-            to publish
-        </p>
-    {% endif %}
+    <div class="mt-5">
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {{ render(controller('App\\Controller\\CommentsController::createCommentForm', {'id': article.id})) }}
+        {% else %}
+            <div class="jumbotron w-75" style="padding-bottom: 5px; padding-top: 20px">
+                <p style="font-size: 20px;">
+                    <a style="font-size: 16px; font-weight: bolder" class="btn btn-outline-success mr-2" href="{{ path('app_login', {'redirect_to': app.request.pathInfo}) }}">
+                        <i class="fa fa-sign-in mr-1" aria-hidden="true"></i> Login to publish
+                    </a>
+                    a new comment
+                </p>
+            </div>
 
-    <h3>
-        Nb comments: {{ article.comments | length }}
+        {% endif %}
+    </div>
+    <h3 class="mt-5 mb-5">
+        <i class="fa fa-comments mr-2" aria-hidden="true"></i>&nbsp;{{ article.comments | length }}
+        {% if article.comments | length <= 1 %}
+            Comment
+        {% else %}
+            Comments
+        {% endif %}
     </h3>
 
     {% if article.comments | length > 0 %}
         {% for comment in article.comments %}
-            <div class="">
-                <a id="comment_{{ comment.id }}"></a>
-                <h4 class="">
-                    <strong>{{ comment.author.fullName }}</strong> Commented on
-                    <strong>{{ comment.publishedAt|date('d/m/Y H:i') }}</strong>
-                    {% if comment.author == app.user %}
-                        <a href="{{ path('app_comments_edit', {'id': comment.id}) }}">Edit</a>
-                        {{ include('comments/delete/_delete_form.html.twig') }}
-{#                        <a href="#" id="comment_{{ comment.id }}">Delete</a>#}
-                    {% endif %}
-                </h4>
-                <div class="">
-                    {{ comment.content | raw }}
-                </div>
-
-                <a href="{{ path('app_comments_responses_new', {'commentId': comment.id}) }}">
-                    Answer
-                </a>
-
-
-                {% if comment.commentResponses | length > 0 %}
-                    <br>
-                    <div>
-                        <h2>Comment Responses</h2>
-                        {% for commentResponse in comment.commentResponses %}
-                            <div>
-                                <a id="comment_response_{{ commentResponse.id }}"></a>
-                                <h4 class="">
-                                    <strong>{{ commentResponse.author.fullName }}</strong> Answered on
-                                    <strong>{{ commentResponse.publishedAt|date('d/m/Y H:i') }}</strong>
-                                    {% if commentResponse.author == app.user %}
-                                        <a href="{{ path('app_comments_responses_edit', {'id': commentResponse.id}) }}">Edit</a>
-                                        {{ include('comments_responses/delete/_delete_form.html.twig') }}
-                                    {% endif %}
-                                </h4>
-                                <div class="">
-                                    {{ commentResponse.content | raw }}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
+            {{ include('articles/show/_comments_list.html.twig') }}
         {% endfor %}
     {% else %}
         <div class="post-comment">

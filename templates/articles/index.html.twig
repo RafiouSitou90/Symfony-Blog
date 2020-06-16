@@ -3,10 +3,91 @@
 {% block title %}Articles{% endblock %}
 
 {% block body %}
-    <h1>Articles page</h1>
+    <div class="text-center">
+        <h1 class="">Articles page</h1>
+    </div>
 
-    {% for article in articles_paginator.results %}
-        <h4>{{ article.title }}</h4>
-        {{ include('articles/tags/_articles_tags.html.twig') }}
+    {% for article in articles %}
+        <article class="article mb-5 mt-5">
+            <div class="row">
+                <div class="col-md-3 zoom">
+                    <img width="50" height="200" src="{{ vich_uploader_asset(article, 'imageFile') }}"
+                         class="card-img-top inline-photo show-on-scroll" alt="{{ article.title }}"/>
+                </div>
+                <div class="col-md-9">
+                    <h2>
+                        <a href="{{ path('app_articles_show', {'slug': article.slug}) }}">
+                            {{ article.title }}
+                        </a>
+                    </h2>
+
+                    <p class="article-metadata">
+                        <span class="metadata"><i class="fa fa-calendar"></i>
+                            {{ article.publishedAt | format_datetime('long', 'medium', '', 'America/Sao_Paulo') }}
+                        </span>
+                        <span class="metadata"><i class="fa fa-user"></i> {{ article.author.fullName }}</span>
+                    </p>
+
+                    <p>{{ article.summary }}</p>
+                    {{ include('articles/tags/_articles_tags.html.twig') }}
+                </div>
+            </div>
+        </article>
     {% endfor %}
+
+    <div class="mt-5 mb-5">
+        {{ knp_pagination_render(articles) }}
+    </div>
+
+{#    {% if articles_paginator.hasToPaginate %}
+        <div class="text-center">
+            <ul class="pagination pagination-lg">
+                {% if articles_paginator.hasPreviousPage %}
+                    <li class="page-item">
+                        <a href="{{ path('app_articles_index_paginated', {page: articles_paginator.previousPage}) }}"
+                           rel="previous" class="page-link">
+                            <i class="fa fw fa-long-arrow-left"></i>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            <i class="fa fw fa-arrow-left"></i>
+                            Previous
+                        </span>
+                    </li>
+                {% endif %}
+
+                {% for i in 1..articles_paginator.lastPage %}
+                    {% if i == articles_paginator.currentPage %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ i }} <span class="sr-only"></span>
+                            </span>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ path('app_articles_index_paginated', {page: i}) }}"  class="page-link">
+                                {{ i }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if articles_paginator.hasNextPage %}
+                    <li class="page-item next">
+                        <a href="{{ path('app_articles_index_paginated', {page: articles_paginator.nextPage}) }}"
+                           rel="next" class="page-link">Next <i class="fa fw fa-arrow-right"></i>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item next disabled">
+                        <span class="page-link">
+                            <i class="fa fw fa-arrow-right"></i>
+                        </span>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}#}
+
 {% endblock %}

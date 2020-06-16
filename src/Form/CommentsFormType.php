@@ -20,7 +20,10 @@ class CommentsFormType extends AbstractType
     {
         $builder
             ->add('content', TextareaType::class, [
-
+                'label' => false,
+                'attr' => [
+                    'class' => 'form-control'
+                ]
             ])
         ;
     }

@@ -84,6 +84,7 @@ class AdminArticlesController extends AbstractController
             if ($article->getArticleStatus() !== Articles::PUBLISHED()) {
                 $article->setPublishedAt(null);
             }
+
             $this->manager->persist($article);
             $this->manager->flush();
 

@@ -83,7 +83,7 @@ class SecurityControllerTest extends WebTestCase
         ]);
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
         $this->assertResponseHasHeader('Location', '/');
-        $this->assertResponseRedirects('', Response::HTTP_FOUND);
+            $this->assertResponseRedirects('', Response::HTTP_FOUND);
         $this->client->followRedirect();
         /** ************************* **/
     }

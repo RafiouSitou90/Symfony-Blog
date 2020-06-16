@@ -1,13 +1,15 @@
 {{ form_start(form, {method: 'POST', action: path('app_comments_responses_new', {'commentId': comment.id})}) }}
-<fieldset>
-    <legend>Add comment response</legend>
-    {{ form_errors(form) }}
+    <fieldset>
+        <legend>Add comment response</legend>
+        {{ form_errors(form) }}
 
-    {{ form_label(form.content) }}
-    {{ form_errors(form.content) }}
-    {{ form_widget(form.content) }}
-    {{ form_help(form.content) }}
+        <div class="form-group">
+            {{ form_label(form.content) }}
+            {{ form_errors(form.content) }}
+            {{ form_widget(form.content) }}
+            {{ form_help(form.content) }}
+        </div>
 
-    <button class="" type="submit">Publish</button>
-</fieldset>
+        <button class="btn btn-secondary" type="submit">Publish</button>
+    </fieldset>
 {{ form_end(form) }}
