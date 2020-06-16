@@ -62,9 +62,9 @@ class Articles
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
-     * @var string|null
+     * @var string
      */
-    private ?string $id = null;
+    private string $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -79,7 +79,7 @@ class Articles
      * )
      * @var string
      */
-    private ?string $title = null;
+    private string $title = '';
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -100,7 +100,7 @@ class Articles
      * )
      * @var string
      */
-    private ?string $summary = null;
+    private string $summary = '';
 
     /**
      * @ORM\Column(type="text")
@@ -113,7 +113,7 @@ class Articles
      * )
      * @var string
      */
-    private ?string $content = null;
+    private string $content = '';
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
@@ -126,13 +126,13 @@ class Articles
      * @ORM\Column(type="string", length=191, nullable=true)
      * @var string
      */
-    private ?string $imageName = null;
+    private string $imageName = '';
 
     /**
      * @ORM\Column(type="integer")
      * @var int
      */
-    private ?int $imageSize = 0;
+    private int $imageSize = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="articles")
@@ -199,17 +199,17 @@ class Articles
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -227,9 +227,9 @@ class Articles
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }
@@ -247,9 +247,9 @@ class Articles
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getSummary(): ?string
+    public function getSummary(): string
     {
         return $this->summary;
     }
@@ -267,9 +267,9 @@ class Articles
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -327,9 +327,9 @@ class Articles
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getArticleStatus(): ?string
+    public function getArticleStatus(): string
     {
         return $this->articleStatus;
     }
@@ -347,9 +347,9 @@ class Articles
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getCommentsStatus(): ?string
+    public function getCommentsStatus(): string
     {
         return $this->commentsStatus;
     }
@@ -388,19 +388,19 @@ class Articles
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getImageName(): ?string
+    public function getImageName(): string
     {
         return $this->imageName;
     }
 
     /**
-     * @param string|null $imageName
+     * @param string $imageName
      *
      * @return $this
      */
-    public function setImageName(?string $imageName): self
+    public function setImageName(string $imageName): self
     {
         $this->imageName = $imageName;
 
@@ -408,19 +408,19 @@ class Articles
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getImageSize(): ?int
+    public function getImageSize(): int
     {
         return $this->imageSize;
     }
 
     /**
-     * @param int|null $imageSize
+     * @param int $imageSize
      *
      * @return $this
      */
-    public function setImageSize(?int $imageSize): self
+    public function setImageSize(int $imageSize): self
     {
         $this->imageSize = $imageSize;
 

@@ -31,9 +31,9 @@ class Categories
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
-     * @var string|null
+     * @var string
      */
-    private ?string $id = null;
+    private string $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -48,7 +48,7 @@ class Categories
      * )
      * @var string
      */
-    private ?string $name = null;
+    private string $name = '';
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -72,9 +72,9 @@ class Categories
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -100,9 +100,9 @@ class Categories
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }

@@ -5,6 +5,7 @@ namespace App\Entity\Traits;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
+use Doctrine\ORM\Mapping as ORM;
 use Exception;
 
 trait Timestamps

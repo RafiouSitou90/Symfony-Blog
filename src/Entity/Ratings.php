@@ -35,9 +35,9 @@ class Ratings
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
-     * @var string|null
+     * @var string
      */
-    private ?string $id = null;
+    private string $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Articles::class, inversedBy="ratings")
@@ -58,9 +58,9 @@ class Ratings
     private string $status;
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -73,6 +73,10 @@ class Ratings
         return $this->article;
     }
 
+    /**
+     * @param Articles|null $article
+     * @return $this
+     */
     public function setArticle(?Articles $article): self
     {
         $this->article = $article;
@@ -80,11 +84,18 @@ class Ratings
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
+    /**
+     * @param User|null $user
+     * @return $this
+     */
     public function setUser(?User $user): self
     {
         $this->user = $user;
@@ -92,11 +103,18 @@ class Ratings
         return $this;
     }
 
-    public function getStatus(): ?string
+    /**
+     * @return string
+     */
+    public function getStatus(): string
     {
         return $this->status;
     }
 
+    /**
+     * @param string $status
+     * @return $this
+     */
     public function setStatus(string $status): self
     {
         $this->status = $status;
