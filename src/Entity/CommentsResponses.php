@@ -30,9 +30,9 @@ class CommentsResponses
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
-     * @var string|null
+     * @var string
      */
-    private ?string $id = null;
+    private string $id;
 
     /**
      * @ORM\Column(type="text")
@@ -47,7 +47,7 @@ class CommentsResponses
      * )
      * @var string
      */
-    private ?string $content = null;
+    private string $content = '';
 
     /**
      * @ORM\ManyToOne(targetEntity=Comments::class, inversedBy="commentResponses")
@@ -68,17 +68,17 @@ class CommentsResponses
     private DateTimeInterface $publishedAt;
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -136,9 +136,9 @@ class CommentsResponses
     }
 
     /**
-     * @return DateTimeInterface|null
+     * @return DateTimeInterface
      */
-    public function getPublishedAt(): ?DateTimeInterface
+    public function getPublishedAt(): DateTimeInterface
     {
         return $this->publishedAt;
     }

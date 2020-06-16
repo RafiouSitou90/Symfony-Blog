@@ -10,6 +10,7 @@ parameters:
     - tests
   excludes_analyse:
     - src/Migrations/*
+    - src/Pagination/*
     - tests/bootstrap.php
   checkMissingIterableValueType: false
   checkGenericClassInNonGenericObjectType: false

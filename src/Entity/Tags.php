@@ -26,9 +26,9 @@ class Tags implements JsonSerializable
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
-     * @var string|null
+     * @var string
      */
-    private ?string $id = null;
+    private string $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -37,9 +37,9 @@ class Tags implements JsonSerializable
     private string $name;
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -67,7 +67,7 @@ class Tags implements JsonSerializable
     /**
      * {@inheritdoc}
      *
-     * @return string|null
+     * @return string
      */
     public function jsonSerialize()
     {

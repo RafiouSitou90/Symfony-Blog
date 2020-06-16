@@ -29,11 +29,11 @@ class Profile implements Serializable
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
-     * @var string|null
+     * @var string
      */
-    private ?string $id = null;
+    private string $id;
 
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }

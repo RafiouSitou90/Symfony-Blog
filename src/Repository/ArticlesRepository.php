@@ -82,6 +82,10 @@ class ArticlesRepository extends ServiceEntityRepository
     */
 
 
+    /**
+     * @param Tags|null $tag
+     * @return Articles[]
+     */
     public function findAllLatest (?Tags $tag = null)
     {
         $qb = $this->createQueryBuilder('a')

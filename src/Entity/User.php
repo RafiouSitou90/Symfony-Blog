@@ -35,9 +35,9 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
-     * @var string|null
+     * @var string
      */
-    private ?string $id = null;
+    private string $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -52,7 +52,7 @@ class User implements UserInterface
      * )
      * @var string
      */
-    private ?string $username = null;
+    private string $username = '';
 
     /**
      * @ORM\Column(type="json")
@@ -75,7 +75,7 @@ class User implements UserInterface
      * )
      * @var string
      */
-    private ?string $email = null;
+    private string $email = '';
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -90,7 +90,7 @@ class User implements UserInterface
      * )
      * @var string
      */
-    private ?string $fullName = null;
+    private string $fullName = '';
 
     /**
      * @ORM\OneToMany(targetEntity=Articles::class, mappedBy="author")
@@ -152,9 +152,9 @@ class User implements UserInterface
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -183,6 +183,8 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     *
+     * @return array
      */
     public function getRoles(): array
     {
@@ -207,6 +209,8 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     *
+     * @return string
      */
     public function getPassword(): string
     {
@@ -246,9 +250,9 @@ class User implements UserInterface
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getFullName(): ?string
+    public function getFullName(): string
     {
         return $this->fullName;
     }
@@ -266,9 +270,9 @@ class User implements UserInterface
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
