@@ -70,7 +70,7 @@ class Comments
     private ?User $author = null;
 
     /**
-     * @ORM\OneToMany(targetEntity=CommentsResponses::class, mappedBy="comment")
+     * @ORM\OneToMany(targetEntity=CommentsResponses::class, mappedBy="comment", orphanRemoval=true, cascade={"persist"})
      * @var CommentsResponses[]|ArrayCollection
      */
     private $commentResponses;

@@ -4,12 +4,10 @@ namespace App\Repository;
 
 use App\Entity\Articles;
 use App\Entity\Tags;
-use App\Pagination\Paginator;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 
 /**
  * @method Articles|null find($id, $lockMode = null, $lockVersion = null)
@@ -54,12 +52,12 @@ class ArticlesRepository extends ServiceEntityRepository
     */
 
     /**
-     * @param int $page
-     * @param Tags|null $tag
-     * @return Paginator
-     * @throws Exception
+//     * @param int $page
+//     * @param Tags|null $tag
+//     * @return Paginator
+//     * @throws Exception
      */
-    public function findAllLatest(int $page = 1, ?Tags $tag = null)
+/*    public function findAllLatest(int $page = 1, ?Tags $tag = null)
     {
         $qb = $this->createQueryBuilder('a')
             ->addSelect('author', 'tags', 'category', 'comments', 'ratings')
@@ -69,7 +67,7 @@ class ArticlesRepository extends ServiceEntityRepository
             ->leftJoin('a.comments', 'comments')
             ->leftJoin('a.ratings', 'ratings')
             ->where('a.publishedAt <= :now')
-            ->andWhere('a.articleStatus <= :status')
+            ->andWhere('a.articleStatus = :status')
             ->orderBy('a.publishedAt', 'DESC')
             ->setParameter('now', new DateTime('now'))
             ->setParameter('status', Articles::PUBLISHED())
@@ -80,6 +78,31 @@ class ArticlesRepository extends ServiceEntityRepository
         }
 
         return (new Paginator($qb))->paginate($page);
+    }
+    */
+
+
+    public function findAllLatest (?Tags $tag = null)
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->addSelect('author', 'tags', 'category', 'comments', 'ratings')
+            ->innerJoin('a.author', 'author')
+            ->join('a.category', 'category')
+            ->leftJoin('a.tags', 'tags')
+            ->leftJoin('a.comments', 'comments')
+            ->leftJoin('a.ratings', 'ratings')
+            ->where('a.publishedAt <= :now')
+            ->andWhere('a.articleStatus = :status')
+            ->orderBy('a.publishedAt', 'DESC')
+            ->setParameter('now', new DateTime('now'))
+            ->setParameter('status', Articles::PUBLISHED())
+        ;
+
+        if (null !== $tag) {
+            $qb->andWhere(':tag MEMBER OF a.tags')->setParameter('tag', $tag);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -97,8 +120,8 @@ class ArticlesRepository extends ServiceEntityRepository
             ->leftJoin('a.tags', 'tags')
             ->leftJoin('a.ratings', 'ratings')
             ->leftJoin('comments.commentResponses', 'commentResponses')
-            ->where('a.slug <= :slug')
-            ->andWhere('a.articleStatus <= :status')
+            ->where('a.slug = :slug')
+            ->andWhere('a.articleStatus = :status')
             ->orderBy('a.publishedAt', 'DESC')
             ->setParameter('slug', $slug)
             ->setParameter('status', Articles::PUBLISHED())

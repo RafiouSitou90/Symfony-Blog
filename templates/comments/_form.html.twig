@@ -2,12 +2,13 @@
 <fieldset>
     <legend>Add comment</legend>
     {{ form_errors(form) }}
+    <div class="form-group">
+        {{ form_label(form.content) }}
+        {{ form_errors(form.content) }}
+        {{ form_widget(form.content) }}
+        {{ form_help(form.content) }}
+    </div>
 
-    {{ form_label(form.content) }}
-    {{ form_errors(form.content) }}
-    {{ form_widget(form.content) }}
-    {{ form_help(form.content) }}
-
-    <button class="" type="submit">Publish</button>
+    <button class="btn btn-secondary" type="submit">Publish</button>
 </fieldset>
 {{ form_end(form) }}

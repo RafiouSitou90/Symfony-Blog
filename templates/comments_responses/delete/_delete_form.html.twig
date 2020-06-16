@@ -1,4 +1,6 @@
 <form action="{{ url('app_comments_responses_delete', {id: commentResponse.id}) }}" method="post">
     <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
-    <button type="submit">Delete</button>
+    <button class="btn btn-outline-danger" type="submit">
+        <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Delete
+    </button>
 </form>
